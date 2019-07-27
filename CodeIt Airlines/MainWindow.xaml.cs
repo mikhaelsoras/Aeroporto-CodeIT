@@ -1,4 +1,5 @@
 ﻿using CodeIT.Airlines.Business.Cenarios;
+using CodeIT.Airlines.Business.Interfaces;
 using System;
 using System.Windows;
 
@@ -9,22 +10,26 @@ namespace CodeIt_Airlines
         public MainWindow()
         {
             InitializeComponent();
+
             IniciarTransferenciaTripulantes();
         }
 
         private void IniciarTransferenciaTripulantes()
         {
-            //try
-            //{
-                var cenario = new CenarioExemplo();
-                cenario.IniciarEmbarque();
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show(e.Message);
-            //}
+            var cenario = new CenarioExemplo();
+            ObservarLogger(cenario);
+            cenario.IniciarEmbarque();
+        }
 
-            Close();
+        private void ObservarLogger(IGerarLog logger)
+        {
+            logger.OnLog += Logger_OnLog;
+        }
+
+        private void Logger_OnLog(string msg)
+        {
+            rtbLog.AppendText(msg + Environment.NewLine);
+            rtbLog.ScrollToEnd();
         }
     }
 }
