@@ -17,11 +17,11 @@ namespace CodeIT.Airlines.Models.Entidades
             if (!sozinhaComOutraPessoa)
                 return;
 
-            var policial = from pessoa in local.Pessoas
+            var piloto = from pessoa in local.Pessoas
                            where pessoa.TipoTripulacao == TripulacaoTipo.Piloto
                            select pessoa;
 
-            if (policial.Count() == 0)
+            if (piloto.Count() == 0)
                 throw new ComissariaSozinhaComPilotoException("Comissária sozinha com o Piloto.");
         }
     }

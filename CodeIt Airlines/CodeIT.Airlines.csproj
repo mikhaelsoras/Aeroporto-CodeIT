@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeIT.Airlines.Business\CodeIT.Airlines.Business.csproj">
-      <Project>{f1e591e9-c0b9-4cf7-9be4-11316f96c59c}</Project>
+      <Project>{4d6d7dda-af56-48c0-9fa7-94b1040ccbc2}</Project>
       <Name>CodeIT.Airlines.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\CodeIT.Airlines.Models\CodeIT.Airlines.Models.csproj">

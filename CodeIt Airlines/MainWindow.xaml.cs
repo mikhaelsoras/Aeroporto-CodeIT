@@ -1,9 +1,5 @@
-﻿using CodeIT.Airlines.Models.Carros;
-using CodeIT.Airlines.Models.Carros.Interfaces;
-using CodeIT.Airlines.Models.Entidades;
-using CodeIT.Airlines.Models.Entidades.Interfaces;
-using CodeIT.Airlines.Models.Locais;
-using CodeIT.Airlines.Models.Locais.Interfaces;
+﻿using CodeIT.Airlines.Business.Cenarios;
+using System;
 using System.Windows;
 
 namespace CodeIt_Airlines
@@ -13,23 +9,22 @@ namespace CodeIt_Airlines
         public MainWindow()
         {
             InitializeComponent();
+            IniciarTransferenciaTripulantes();
+        }
 
-            try
-            {
-                ILocal aeroporto = new Local("Aeroporto");
-                ICarro carro = new Carro("Smart Fortwo", 2);
-                ILocal terminal = new Local("Terminal");
+        private void IniciarTransferenciaTripulantes()
+        {
+            //try
+            //{
+                var cenario = new CenarioExemplo();
+                cenario.IniciarEmbarque();
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show(e.Message);
+            //}
 
-                IPessoa[] pessoasAeroporto = { new Presidiario(), new Policial() };
-
-                terminal.RegistrarEntrada(pessoasAeroporto);
-                terminal.RegistrarEntrada(new Passageiro());
-            }
-            catch (System.Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            
+            Close();
         }
     }
 }
