@@ -21,7 +21,7 @@ namespace CodeIT.Airlines.Models.Entidades
                                where pessoa.TipoTripulacao == TripulacaoTipo.ChefeServico
                                select pessoa;
 
-            if (chefeServico.Count() == 0)
+            if (chefeServico.Count() == 1)
                 throw new OficialSozinhoComChefeServicoException("Oficial sozinho com Chefe de Serviço.");
         }
     }

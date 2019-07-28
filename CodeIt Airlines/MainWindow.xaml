@@ -7,7 +7,23 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <RichTextBox x:Name="rtbLog" IsReadOnly="True" VerticalScrollBarVisibility="Visible">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Click="BtnCenarioTradicionalClick">Transferir Somente Passageiros</Button>
+            <Button Grid.Column="2" Click="BtnCenarioCompletoClick">Transferir Todos do Terminal</Button>
+        </Grid>
+        
+        <RichTextBox Grid.Row="1" x:Name="rtbLog" IsReadOnly="True" VerticalScrollBarVisibility="Visible">
             <FlowDocument>
                 <Paragraph>
                     <Run Text=""/>

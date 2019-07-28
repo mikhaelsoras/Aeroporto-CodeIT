@@ -21,7 +21,7 @@ namespace CodeIT.Airlines.Models.Entidades
                            where pessoa.TipoTripulacao == TripulacaoTipo.Piloto
                            select pessoa;
 
-            if (piloto.Count() == 0)
+            if (piloto.Count() == 1)
                 throw new ComissariaSozinhaComPilotoException("Comissária sozinha com o Piloto.");
         }
     }

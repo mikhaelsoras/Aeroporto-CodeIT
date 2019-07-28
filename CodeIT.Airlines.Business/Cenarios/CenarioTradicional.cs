@@ -9,21 +9,22 @@ using CodeIT.Airlines.Models.Locais.Interfaces;
 using System;
 using System.Linq;
 using System.Text;
+using CodeIT.Airlines.Business.Extensions;
 
 namespace CodeIT.Airlines.Business.Cenarios
 {
     /// <summary>
     /// Testa um cenário onde a tripulação tecnica e a tripulação de cabine se encontra na Aeronave.
     /// </summary>
-    public sealed class CenarioExemplo : IGerarLog
+    public sealed class CenarioTradicional : ICenario
     {
         public readonly ILocal Aeronave = new Local("Aeronave");
         public readonly ILocal Terminal = new Local("Terminal");
-        public readonly ICarro Carro;
+        public readonly ICarro ForTwo;
 
         public event Action<string> OnLog;
 
-        public CenarioExemplo()
+        public CenarioTradicional()
         {
             Terminal.LocalChanged += VerificarCondicaoSucesso;
             Aeronave.LocalChanged += VerificarCondicaoSucesso;
@@ -31,54 +32,30 @@ namespace CodeIT.Airlines.Business.Cenarios
             Terminal.RegistrarEntrada(GerarPessoasIniciaisTerminal());
             Aeronave.RegistrarEntrada(GerarPessoasIniciaisAeronave());
 
-            Carro = new Carro(Aeronave, "Smart Fortwo", 2);
+            ForTwo = new Carro(Aeronave, "Smart Fortwo", 2);
         }
 
         private void VerificarCondicaoSucesso(ILocal local)
         {
-            if (Terminal.Pessoas.Count() == 0 && Carro.Pessoas.Count() == 0)
+            if (Terminal.Pessoas.Count() == 0 && ForTwo.Pessoas.Count() == 0)
             {
-                OnLog?.Invoke($"Sucesso: Todas as pessoas do {Terminal.Nome} foram transferidas.");
+                Log($"Sucesso: Todas as pessoas do {Terminal.Nome} foram transferidas.");
             }
         }
 
         public void IniciarEmbarque()
         {
-            TransferirPessoas(Carro, Terminal, Aeronave.PessoaPorTipo(TripulacaoTipo.Piloto));
-            TransferirPessoas(Carro, Aeronave, 
+            ForTwo.LevarPessoasParaDestino(Terminal, this, Aeronave.PessoaPorTipo(TripulacaoTipo.Piloto));
+            ForTwo.LevarPessoasParaDestino(Aeronave, this,
                 Terminal.PessoaPorTipo(TripulacaoTipo.Policial), Terminal.PessoaPorTipo(TripulacaoTipo.Presidiario));
 
             while (Terminal.Pessoas.Any())
             {
-                TransferirPessoas(Carro, Terminal,
+                ForTwo.LevarPessoasParaDestino(Terminal, this,
                     Aeronave.PessoaPorTipo(TripulacaoTipo.ChefeServico));
 
-                TransferirPessoas(Carro, Aeronave, 
+                ForTwo.LevarPessoasParaDestino(Aeronave, this,
                     Terminal.PessoaPorTipo(TripulacaoTipo.ChefeServico), Terminal.Pessoas.First());
-            }
-        }
-
-        private void TransferirPessoas(ICarro carro, ILocal destino, params IPessoa[] pessoas)
-        {
-            carro.RegistrarEntrada(pessoas);
-
-            var foiforam = pessoas.Count() == 1 ? "foi" : "foram";
-            OnLog?.Invoke($"{PessoasToText(pessoas)} {foiforam} para o {destino.Nome} de {carro.Modelo}.");
-
-            carro.DirigirAte(destino);
-
-            string PessoasToText(params IPessoa[] _pessoas)
-            {
-                var res = new StringBuilder();
-
-                for (int i = 0; i < _pessoas.Count(); i++)
-                {
-                    if (i != 0)
-                        res.Append(" e ");
-                    res.Append(_pessoas[i].GetType().Name);
-                }
-
-                return res.ToString();
             }
         }
 
@@ -110,6 +87,11 @@ namespace CodeIT.Airlines.Business.Cenarios
             };
 
             return pessoas;
+        }
+
+        public void Log(string message)
+        {
+            OnLog?.Invoke(message);
         }
     }
 }
